@@ -5,33 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>MAO Calculator</title>
+    <title>Deal Analyzer</title>
     <style>
         :root {
-            --bg-color: #f4f7f6;
+            --bg-color: #f4f5f7;
             --card-bg: #ffffff;
-            --primary: #2c3e50;
-            --accent: #27ae60;
-            --text: #333333;
-            --border: #e0e0e0;
+            --primary: #2b3648;
+            --accent: #4382ff;
+            --success: #4ade80;
+            --text: #1f2937;
+            --border: #e5e7eb;
         }
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--bg-color); margin: 0; padding: 20px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; color: var(--text); }
-        .app-container { background: var(--card-bg); width: 100%; max-width: 400px; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; }
-        h1 { text-align: center; color: var(--primary); font-size: 24px; margin-top: 0; margin-bottom: 30px; }
+        * { box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-color); 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            color: var(--text);
+        }
+        .app-container { 
+            background: var(--card-bg); 
+            width: 100%; 
+            max-width: 400px; 
+            padding: 30px 25px; 
+            border-radius: 24px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+        }
+        h1 { 
+            text-align: center; 
+            color: var(--primary); 
+            font-size: 26px; 
+            margin-top: 0; 
+            margin-bottom: 30px; 
+            font-weight: 700;
+        }
         .input-group { margin-bottom: 25px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--primary); font-size: 14px; }
-        input[type="number"] { width: 100%; padding: 15px; font-size: 18px; border: 2px solid var(--border); border-radius: 10px; outline: none; transition: border 0.3s; background: #fafafa; }
+        label { 
+            display: block; 
+            font-weight: 700; 
+            margin-bottom: 8px; 
+            color: var(--primary); 
+            font-size: 14px; 
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper span {
+            position: absolute;
+            left: 15px;
+            color: #9ca3af;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        input[type="number"] { 
+            width: 100%; 
+            padding: 14px 14px 14px 35px; 
+            font-size: 18px; 
+            border: 2px solid var(--border); 
+            border-radius: 12px; 
+            outline: none; 
+            transition: border-color 0.2s; 
+            background: #fafafa; 
+        }
         input[type="number"]:focus { border-color: var(--accent); }
-        .slider-container { display: flex; align-items: center; justify-content: space-between; }
-        input[type="range"] { flex-grow: 1; margin-right: 15px; }
-        .slider-value { font-weight: bold; font-size: 18px; color: var(--accent); min-width: 45px; text-align: right; }
-        .result-card { background: var(--primary); color: white; padding: 25px 20px; border-radius: 15px; text-align: center; margin-top: 30px; }
-        .result-label { font-size: 14px; opacity: 0.8; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .result-value { font-size: 36px; font-weight: bold; margin: 0; color: #2ecc71; }
-        .currency-symbol { position: relative; }
-        .currency-symbol::before { content: "$"; position: absolute; left: 15px; top: 15px; font-size: 18px; color: #888; z-index: 1; }
-        .currency-symbol input { padding-left: 35px; }
+        
+        .slider-group { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-top: 10px;
+        }
+        input[type="range"] { 
+            flex-grow: 1; 
+            margin-right: 15px; 
+            accent-color: var(--accent);
+        }
+        .slider-value { 
+            font-weight: 700; 
+            font-size: 18px; 
+            color: var(--success); 
+            min-width: 45px; 
+            text-align: right; 
+        }
+        
+        .result-card { 
+            background: var(--primary); 
+            color: white; 
+            padding: 25px 20px; 
+            border-radius: 16px; 
+            text-align: center; 
+            margin-top: 30px; 
+        }
+        .result-label { 
+            font-size: 12px; 
+            opacity: 0.8; 
+            margin-bottom: 8px; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+        }
+        .result-value { 
+            font-size: 42px; 
+            font-weight: 800; 
+            margin: 0; 
+            color: var(--success); 
+        }
     </style>
 </head>
 <body>
@@ -39,27 +123,33 @@
 <div class="app-container">
     <h1>Deal Analyzer</h1>
 
-    <div class="input-group currency-symbol">
+    <div class="input-group">
         <label for="arv">After Repair Value (ARV)</label>
-        <input type="number" id="arv" placeholder="150000" inputmode="numeric">
+        <div class="input-wrapper">
+            <span>$</span>
+            <input type="number" id="arv" value="100000" inputmode="numeric">
+        </div>
     </div>
 
-    <div class="input-group currency-symbol">
+    <div class="input-group">
         <label for="repairs">Total Repair Estimate</label>
-        <input type="number" id="repairs" placeholder="33000" inputmode="numeric">
+        <div class="input-wrapper">
+            <span>$</span>
+            <input type="number" id="repairs" value="30000" inputmode="numeric">
+        </div>
     </div>
 
     <div class="input-group">
         <label for="rule">Max Offer Percentage (Rule)</label>
-        <div class="slider-container">
-            <input type="range" id="rule" min="60" max="85" value="70" step="1">
-            <span class="slider-value" id="ruleDisplay">70%</span>
+        <div class="slider-group">
+            <input type="range" id="rule" min="60" max="85" value="66" step="1">
+            <span class="slider-value" id="ruleDisplay">66%</span>
         </div>
     </div>
 
     <div class="result-card">
         <div class="result-label">Maximum Allowable Offer</div>
-        <div class="result-value" id="maoResult">$0</div>
+        <div class="result-value" id="maoResult">$36,000</div>
     </div>
 </div>
 
@@ -71,11 +161,15 @@
     const maoResult = document.getElementById('maoResult');
 
     function calculateMAO() {
+        // Grab the numbers from the inputs
         const arv = parseFloat(arvInput.value) || 0;
         const repairs = parseFloat(repairsInput.value) || 0;
         const rule = parseFloat(ruleSlider.value) / 100;
 
+        // Run the MAO formula
         let mao = (arv * rule) - repairs;
+        
+        // Prevent negative offers
         if (mao < 0) mao = 0;
 
         // Format as currency
@@ -86,7 +180,7 @@
         }).format(mao);
     }
 
-    // Event Listeners to auto-calculate as you type or slide
+    // Auto-calculate as you type or slide
     arvInput.addEventListener('input', calculateMAO);
     repairsInput.addEventListener('input', calculateMAO);
     ruleSlider.addEventListener('input', function() {
@@ -94,7 +188,7 @@
         calculateMAO();
     });
 
-    // Run once on load
+    // Run once on load to display initial values
     calculateMAO();
 </script>
 
